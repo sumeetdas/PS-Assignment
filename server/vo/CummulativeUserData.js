@@ -9,6 +9,8 @@ function CummulativeUserData ( userId )
 	this.socialisingMins = 0;
 	this.uniquePurchases = new Set();
 	this.uniqueSnacks = new Set();
+	this.numUniquePurchases = 0;
+	this.numUniqueSnacks = 0;
 	this.weightedScore = 0;
 	
 	this.processUserRecord = function ( record )
@@ -17,8 +19,8 @@ function CummulativeUserData ( userId )
 		addShoppingMins( record.shoppingMins );
 		addSnackingMins( record.snackingMins );
 		addSocialisingMins( record.socialisingMins );
-		addPurchase( record.purchases );
-		addSnack( record.snacks );
+		addPurchases( record.purchases );
+		addSnacks( record.snacks );
 	}
 	
 	const addTotalMins = function ( totalMins )
@@ -53,35 +55,41 @@ function CummulativeUserData ( userId )
 		}
 	}
 	
-	const addPurchase = function ( purchaseArray )
+	const addPurchases = function ( purchaseArray )
 	{
 		purchaseArray.forEach( purchase => self.uniquePurchases.add( purchase ) );
+		
+		self.numUniquePurchases = self.uniquePurchases.size;
 	}
 	
-	const addSnack = function ( snackString )
+	const addSnacks = function ( snackString )
 	{
 		if ( snackString )
 		{
 			snackString.split(",").forEach( snack => self.uniqueSnacks.add( snack ) );
 		}
+		
+		self.numUniqueSnacks = self.uniqueSnacks.size;
 	}
 	
 	this.calculateWeightedScore = function ( minUserData, maxUserData )
 	{
-		if ( minUserData instanceof CummulativeUserData && maxUserData instanceof CummulativeUserData )
-		{
-			self.weightedScore = 
-			5 * weightedScore(self.totalMins, minUserData.totalMins, maxUserData.totalMins) + 
-			20 * weightedScore(self.shoppingMins, minUserData.shoppingMins, maxUserData.shoppingMins) + 
-			20 * weightedScore(self.snackingMins, minUserData.snackingMins, maxUserData.snackingMins) +
-			30 * weightedScore(self.socialisingMins, minUserData.socialisingMins, maxUserData.socialisingMins) +
-			10 * weightedScore(self.uniquePurchases.size(), minUserData.uniquePurchases.size(), maxUserData.uniquePurchases.size()) +
-			15 * weightedScore(self.uniqueSnacks.size(), minUserData.uniqueSnacks.size(), maxUserData.uniqueSnacks.size());
-		}
+		self.weightedScore = 
+			5 * subWeightedScore(self.totalMins, minUserData.totalMins, maxUserData.totalMins) + 
+			20 * subWeightedScore(self.shoppingMins, minUserData.shoppingMins, maxUserData.shoppingMins) + 
+			20 * subWeightedScore(self.snackingMins, minUserData.snackingMins, maxUserData.snackingMins) +
+			30 * subWeightedScore(self.socialisingMins, minUserData.socialisingMins, maxUserData.socialisingMins) +
+			10 * subWeightedScore(self.uniquePurchases.size, minUserData.numPurchases, maxUserData.numPurchases) +
+			15 * subWeightedScore(self.uniqueSnacks.size, minUserData.numSnacks, maxUserData.numSnacks);
 	}
 	
-	function weightedScore ( value, min, max )
+	function subWeightedScore ( value, min, max )
 	{
+		if ( min === max )
+		{
+			return 1;
+		}
+		
 		return ( value - min ) / ( max - min );
 	}
 }

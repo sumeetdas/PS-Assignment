@@ -1,7 +1,15 @@
-import mixins
+include mixins.pug
 
 html
 	head
-		head ( title )
+		+head ( title )
+		style(type="text/css").
+			canvas#chart {
+				width: 1200px !important;
+				height: 550px !important;
+			}
 	body
-		navbar( userId )
+		+navbar( userId )
+		script(type="application/json", id="data") !{data}
+		
+		canvas#chart

@@ -1,18 +1,23 @@
 mixin navbar ( userId )
-	nav.navbar.navbar-dark.bg-dark
+	nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
 		a.navbar-brand(href="#") SD
-	div.collapse.navbar-collapse
-		ul.navbar-nav.mr-auto
-			li.nav-item
-				a.nav-link(href="#") Top 30
-			li.nav-item
-				a.nav-link(href="#") Histogram
-		form.form-inline.my-2.my-lg-0
-			input.form-control.mr-sm-2(type="search", placeholder="Search", id="userId" aria-label="Search", value="#{userId}")
-			button.btn.btn-outline-success.my-2.my-sm-0(onclick="redirect();") Search
+		div.collapse.navbar-collapse
+			ul.navbar-nav.mr-auto
+				li.nav-item
+					a.nav-link(href="/") Top 30
+				li.nav-item
+					a.nav-link(href="/histogram") Histogram
+			form.form-inline.my-2.my-lg-0
+				input.form-control.mr-sm-2(type="search", placeholder="Search", id="userId" aria-label="Search", value=userId)
+				button.btn.btn-outline-success.my-2.my-sm-0(onclick="return redirect()") Search
 			
-mixin head( title )
-	script(src="public/js/chart.js")
-	link(rel="stylesheet", href="public/css/bootstrap.css")
+mixin head ( title )
+	link(rel="stylesheet", href="/css/bootstrap.css")
+	
+	script(src="/js/jquery.js")
+	script(src="/js/bootstrap.js")
+	script(src="/js/chart.js")
+	script(src="/js/app.js")
+	
 	title #{title}
 		

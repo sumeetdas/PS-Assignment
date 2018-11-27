@@ -1,12 +1,12 @@
-import mixins
+include mixins.pug
 
 html
 	head
-		head ( title )
+		+head ( title )
 	body
-		navbar( userId )
+		+navbar( userId )
 		div.container
-			table
+			table.table
 				thead
 					tr
 						th User ID
@@ -18,12 +18,13 @@ html
 						th Unique Snack count
 						th Score
 				tbody
-					tr foreach="user in data"
-						td user.userId
-						td user.totalMins
-						td user.shoppingMins
-						td user.snackingMins
-						td user.socializingMins
-						td user.uniquePurchases.size()
-						td user.uniqueSnacks.size()
-						td user.weightedScore					
+					each user in data
+						tr 
+							td #{user.userId}
+							td #{user.totalMins}
+							td #{user.shoppingMins}
+							td #{user.snackingMins}
+							td #{user.socialisingMins}
+							td #{user.numUniquePurchases}
+							td #{user.numUniqueSnacks}
+							td #{user.weightedScore}

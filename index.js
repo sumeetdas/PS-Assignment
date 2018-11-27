@@ -10,6 +10,10 @@ app.set('view engine', 'pug');
 
 app.set('views', path.join(__dirname, '/client'));
 
+app.use('/js', express.static(path.join(__dirname,'client', 'js')));
+
+app.use('/css', express.static(path.join(__dirname,'client', 'css')));
+
 ( () => userService.processUsers() )();
 
 app.get('/', (req, res) => {
@@ -17,22 +21,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/histogram', (req, res) => {
-	res.render('histogram', {title: "Histogram", data: cacheDao.get('histogram')});
+	res.render('histogram', {title: "Histogram", data: JSON.stringify(cacheDao.get('histogram'))});
 });
 
 app.get('/users/:userid', (req, res) => {
 	var userId = req.params.userid;
-	res.render('user', {title: 'User ' + userId, data: cacheDao.get('users')[userId]});
-});
-
-app.get('/topThirty', (req, res) => {
-	res.setHeader('Content-Type', 'application/json');
-    res.send(cacheDao.get('topThirtyUsers'));
-});
-
-app.get('/users', (req, res) => {
-	res.setHeader('Content-Type', 'application/json');
-	res.send(cacheDao.get('users'));
+	res.render('user', {
+		title: 'User ' + userId, 
+		data: ( cacheDao.get('users')[userId] && 
+				JSON.stringify(cacheDao.get('users')[userId].cummulativeUserData) ) || {} 
+	});
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
