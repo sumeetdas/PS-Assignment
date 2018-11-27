@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 function CummulativeUserData ( userId )
 {
 	const self = this;
@@ -81,6 +83,8 @@ function CummulativeUserData ( userId )
 			30 * subWeightedScore(self.socialisingMins, minUserData.socialisingMins, maxUserData.socialisingMins) +
 			10 * subWeightedScore(self.uniquePurchases.size, minUserData.numPurchases, maxUserData.numPurchases) +
 			15 * subWeightedScore(self.uniqueSnacks.size, minUserData.numSnacks, maxUserData.numSnacks);
+			
+		self.weightedScore = _.round(self.weightedScore, 3);
 	}
 	
 	function subWeightedScore ( value, min, max )

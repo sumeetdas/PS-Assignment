@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.4",
+    "lodash": "^4.17.11",
     "node-cache": "^4.2.0",
     "pug": "^2.0.3"
   }
